@@ -3,28 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendario Selección Múltiple de Días</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js"></script>
-    <script src="jspdf.plugin.autotable.js"></script>
-
-
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20% auto;
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+        }
+    </style>
 </head>
 <body>
 
-    <h1>Selecciona múltiples días no contiguos</h1>
+    <h1>Login</h1>
 
-    <label for="datePicker">Selecciona fechas: </label>
-    <input type="text" id="datePicker" placeholder="Selecciona fechas">
+    <form id="loginForm">
+        <label for="username">Usuario:</label>
+        <input type="text" id="username" required>
 
-    <label for="userName">Nombre del usuario:</label>
-    <input type="text" id="userName" placeholder="Ingresa tu nombre">
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" required>
 
-    <button id="recuperarFechasButton">Recuperar Fechas y Nombre</button>
+        <button type="button" onclick="validateLogin()">Iniciar sesión</button>
+    </form>
 
+    <script src="login.js"></script>
 </body>
 </html>

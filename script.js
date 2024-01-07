@@ -1,4 +1,24 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const empleados = [
+    { nombre: "Victor", dni: "12345678A" },
+    { nombre: "Carol", dni: "98765432B" },
+    { nombre: "Rafa", dni: "45678901C" },
+    { nombre: "Empleado4", dni: "11223344D" },
+    { nombre: "Empleado5", dni: "55667788E" },
+  ];
+  const datosEmpresa = {
+    nombre:"Esteller Lloret S.L."
+  }
+  const userNameSelect = document.getElementById("userName");
+
+  empleados.forEach((empleado) => {
+    const option = document.createElement("option");
+    // Convierte el objeto a una cadena JSON y asigna la cadena al atributo "value"
+    option.value = JSON.stringify(empleado);
+    option.textContent = `${empleado.nombre}`;
+    userNameSelect.appendChild(option);
+  });
+
   var datepickerInstance = flatpickr("#datePicker", {
     mode: "multiple",
     dateFormat: "d/m/Y",
@@ -11,7 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
         date.toLocaleDateString()
       );
       var nombreUsuario = document.getElementById("userName").value;
-
+      const empleadoSeleccionado = JSON.parse(nombreUsuario);
+      
       // Crear un objeto jsPDF
       var doc = new jsPDF("p", "pt");
 
@@ -19,18 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
         w: 150,
         h: 50,
       };
-      var comapnyJSON = {
-        CompanyName: "ABCD TECHONOLOGIES",
-        CompanyGSTIN: "37B76C238B7E1Z5",
-        CompanyState: "KERALA (09)",
-        CompanyPAN: "B76C238B7E",
-        CompanyAddressLine1: "ABCDEFGD HOUSE,IX/642-D",
-        CompanyAddressLine2: "ABCDEFGD P.O., NEDUMBASSERY",
-        CompanyAddressLine3: "COCHIN",
-        PIN: "683584",
-        companyEmail: "xyz@gmail.com",
-        companyPhno: "+918189457845",
-      };
+
 
       var customer_BillingInfoJSON = {
         CustomerName: "Jino Shaji",
@@ -45,17 +55,9 @@ document.addEventListener("DOMContentLoaded", function () {
         CustomerPhno: "+918189457845",
       };
 
-      var customer_ShippingInfoJSON = {
-        CustomerName: "Jino Shaji",
-        CustomerGSTIN: "37B76C238B7E1Z5",
-        CustomerState: "KERALA (09)",
-        CustomerPAN: "B76C238B7E",
-        CustomerAddressLine1: "ABCDEFGD HOUSE,IX/642-D",
-        CustomerAddressLine2: "ABCDEFGD P.O., NEDUMBASSERY",
-        CustomerAddressLine3: "COCHIN",
-        PIN: "683584",
-        CustomerEmail: "abcd@gmail.com",
-        CustomerPhno: "+918189457845",
+      var employeInfoJSON = {
+        nombre: empleadoSeleccionado.nombre,
+        dni: empleadoSeleccionado.dni,
       };
 
       var invoiceJSON = {
@@ -102,65 +104,9 @@ document.addEventListener("DOMContentLoaded", function () {
         company_logo.w,
         company_logo.h
       );
-      doc.text(
-        comapnyJSON.CompanyName,
-        startX,
-        (startY += 15 + company_logo.h),
-        { align: "left" }
-      );
-      doc.setFontSize(fontSizes.NormalFontSize);
-      doc.text("GSTIN", startX, (startY += lineSpacing.NormalSpacing));
-      doc.setFontType("normal");
-      doc.text(comapnyJSON.CompanyGSTIN, 80, startY);
-      doc.setFontType("bold");
-      doc.text("STATE", startX, (startY += lineSpacing.NormalSpacing));
-      doc.setFontType("normal");
-      doc.text(comapnyJSON.CompanyState, 80, startY);
-      doc.setFontType("bold");
-      doc.text("PAN", startX, (startY += lineSpacing.NormalSpacing));
-      doc.setFontType("normal");
-      doc.text(comapnyJSON.CompanyPAN, 80, startY);
-      doc.setFontType("bold");
-      doc.text("PIN", startX, (startY += lineSpacing.NormalSpacing));
-      doc.setFontType("normal");
-      doc.text(comapnyJSON.PIN, 80, startY);
-      doc.setFontType("bold");
-      doc.text("EMAIL", startX, (startY += lineSpacing.NormalSpacing));
-      doc.setFontType("normal");
-      doc.text(comapnyJSON.companyEmail, 80, startY);
-      doc.setFontType("bold");
-      doc.text("Phone: ", startX, (startY += lineSpacing.NormalSpacing));
-      doc.setFontType("normal");
-      doc.text(comapnyJSON.companyPhno, 80, startY);
-      var tempY = InitialstartY;
-      doc.setFontType("bold");
-      doc.text(
-        "INVOICE NO: ",
-        rightStartCol1,
-        (tempY += lineSpacing.NormalSpacing)
-      );
-      doc.setFontType("normal");
-      doc.text(invoiceJSON.InvoiceNo, rightStartCol2, tempY);
-      doc.setFontType("bold");
-      doc.text(
-        "INVOICE Date: ",
-        rightStartCol1,
-        (tempY += lineSpacing.NormalSpacing)
-      );
-      doc.setFontType("normal");
-      doc.text(invoiceJSON.InvoiceDate, rightStartCol2, tempY);
-      doc.setFontType("bold");
-      doc.text(
-        "Reference No: ",
-        rightStartCol1,
-        (tempY += lineSpacing.NormalSpacing)
-      );
-      doc.setFontType("normal");
-      doc.text(invoiceJSON.RefNo, rightStartCol2, tempY);
-      doc.setFontType("bold");
-      doc.text("Total: ", rightStartCol1, (tempY += lineSpacing.NormalSpacing));
-      doc.setFontType("normal");
-      doc.text(invoiceJSON.TotalAmnt, rightStartCol2, tempY);
+     
+     
+      startY+=company_logo.h;
       doc.setFontType("normal");
       doc.setLineWidth(1);
       doc.line(
@@ -177,12 +123,9 @@ document.addEventListener("DOMContentLoaded", function () {
       );
       doc.setFontSize(fontSizes.Head2TitleFontSize);
       doc.setFontType("bold");
-      doc.text(
-        "",
-        startX,
-        (startY += lineSpacing.NormalSpacing + 2),
-        { align: "center" }
-      );
+      doc.text("", startX, (startY += lineSpacing.NormalSpacing + 2), {
+        align: "center",
+      });
       doc.setFontSize(fontSizes.NormalFontSize);
       doc.setFontType("bold");
 
@@ -190,107 +133,58 @@ document.addEventListener("DOMContentLoaded", function () {
       var startBilling = startY;
 
       doc.text(
-        "Billing Address,",
+        datosEmpresa.nombre,
         startX,
-        (startY += lineSpacing.NormalSpacing)
-      );
-      doc.text(
-        customer_BillingInfoJSON.CustomerName,
-        startX,
-        (startY += lineSpacing.NormalSpacing)
+        (startY += 15),
+        { align: "right" }
       );
       doc.setFontSize(fontSizes.NormalFontSize);
       doc.text("GSTIN", startX, (startY += lineSpacing.NormalSpacing));
       doc.setFontType("normal");
-      doc.text(customer_BillingInfoJSON.CustomerGSTIN, 80, startY);
-      doc.setFontType("bold");
-      doc.text("Address", startX, (startY += lineSpacing.NormalSpacing));
-      doc.setFontType("normal");
-      doc.text(customer_BillingInfoJSON.CustomerAddressLine1, 80, startY);
-      doc.text(
-        customer_BillingInfoJSON.CustomerAddressLine2,
-        80,
-        (startY += lineSpacing.NormalSpacing)
-      );
-      doc.text(
-        customer_BillingInfoJSON.CustomerAddressLine3,
-        80,
-        (startY += lineSpacing.NormalSpacing)
-      );
+      doc.text("comapnyJSON.CompanyGSTIN", 80, startY);
       doc.setFontType("bold");
       doc.text("STATE", startX, (startY += lineSpacing.NormalSpacing));
       doc.setFontType("normal");
-      doc.text(customer_BillingInfoJSON.CustomerState, 80, startY);
+      doc.text("comapnyJSON.CompanyState", 80, startY);
+      doc.setFontType("bold");
+      doc.text("PAN", startX, (startY += lineSpacing.NormalSpacing));
+      doc.setFontType("normal");
+      doc.text("comapnyJSON.CompanyPAN", 80, startY);
       doc.setFontType("bold");
       doc.text("PIN", startX, (startY += lineSpacing.NormalSpacing));
       doc.setFontType("normal");
-      doc.text(customer_BillingInfoJSON.PIN, 80, startY);
+      doc.text("comapnyJSON.PIN", 80, startY);
       doc.setFontType("bold");
       doc.text("EMAIL", startX, (startY += lineSpacing.NormalSpacing));
       doc.setFontType("normal");
-      doc.text(customer_BillingInfoJSON.CustomerEmail, 80, startY);
+      doc.text("comapnyJSON.companyEmail", 80, startY);
       doc.setFontType("bold");
       doc.text("Phone: ", startX, (startY += lineSpacing.NormalSpacing));
       doc.setFontType("normal");
-      doc.text(customer_BillingInfoJSON.CustomerPhno, 80, startY);
+      doc.text("comapnyJSON.companyPhno", 80, startY);
       //-------Customer Info Shipping---------------------
-      var rightcol1 = 340;
-      var rightcol2 = 400;
+      var rightcol1 = 380;
+      var rightcol2 = 430;
+      var auxStarY=startY;
       startY = startBilling;
       doc.setFontType("bold");
       doc.text(
-        "Shipping Address,",
-        rightcol1,
-        (startY += lineSpacing.NormalSpacing)
-      );
-      doc.text(
-        customer_BillingInfoJSON.CustomerName,
+        "Datos de empleado",
         rightcol1,
         (startY += lineSpacing.NormalSpacing)
       );
       doc.setFontSize(fontSizes.NormalFontSize);
       doc.setFontType("bold");
-      doc.text("GSTIN", rightcol1, (startY += lineSpacing.NormalSpacing));
+      doc.text("Nombre", rightcol1, (startY += lineSpacing.NormalSpacing));
       doc.setFontType("normal");
-      doc.text(customer_BillingInfoJSON.CustomerGSTIN, rightcol2, startY);
+      doc.text(employeInfoJSON.nombre, rightcol2, startY);
+      doc.setFontSize(fontSizes.NormalFontSize);
       doc.setFontType("bold");
-      doc.text("Address", rightcol1, (startY += lineSpacing.NormalSpacing));
+      doc.text("DNI", rightcol1, (startY += lineSpacing.NormalSpacing));
       doc.setFontType("normal");
-      doc.text(
-        customer_BillingInfoJSON.CustomerAddressLine1,
-        rightcol2,
-        startY
-      );
-      doc.text(
-        customer_BillingInfoJSON.CustomerAddressLine2,
-        rightcol2,
-        (startY += lineSpacing.NormalSpacing)
-      );
-      doc.text(
-        customer_BillingInfoJSON.CustomerAddressLine3,
-        rightcol2,
-        (startY += lineSpacing.NormalSpacing)
-      );
-      doc.setFontType("bold");
-      doc.text("STATE", rightcol1, (startY += lineSpacing.NormalSpacing));
-      doc.setFontType("normal");
-      doc.text(customer_BillingInfoJSON.CustomerState, rightcol2, startY);
-
-      doc.setFontType("bold");
-      doc.text("PIN", rightcol1, (startY += lineSpacing.NormalSpacing));
-      doc.setFontType("normal");
-      doc.text(customer_BillingInfoJSON.PIN, rightcol2, startY);
-
-      doc.setFontType("bold");
-      doc.text("EMAIL", rightcol1, (startY += lineSpacing.NormalSpacing));
-      doc.setFontType("normal");
-      doc.text(customer_BillingInfoJSON.CustomerEmail, rightcol2, startY);
-
-      doc.setFontType("bold");
-      doc.text("Phone: ", rightcol1, (startY += lineSpacing.NormalSpacing));
-      doc.setFontType("normal");
-      doc.text(customer_BillingInfoJSON.CustomerPhno, rightcol2, startY);
-
+      doc.text(employeInfoJSON.dni, rightcol2, startY);
+     
+      startY =auxStarY;
       var header = function (data) {
         doc.setFontSize(8);
         doc.setTextColor(40);
@@ -334,7 +228,6 @@ document.addEventListener("DOMContentLoaded", function () {
         { title: "Hora vuelta 1", dataKey: "hora_vuelta_1", width: 40 },
         { title: "Hora salida final", dataKey: "hora_salida_final", width: 40 },
         { title: "Tiempo total", dataKey: "tiempoTotal", width: 40 },
-        
       ];
 
       var rows = fechasSeleccionadas.map(function (fecha, index) {
@@ -379,15 +272,28 @@ document.addEventListener("DOMContentLoaded", function () {
           .toString()
           .padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
 
-          var tiempoEntradaPausa = calcularDiferenciaDeTiempo(hora_formateada_entrada_invierno, hora_formateada_pausa_comida);
-          // var tiempoPausaFinPausa = calcularDiferenciaDeTiempo(registro.hora_pausa, registro.hora_fin_pausa);
-           var tiempoFinPausaSalida1 = calcularDiferenciaDeTiempo(hora_formateada_fin_pausa_comida, hora_formateada_salida_curro1);
-          // var tiempoSalida1Vuelta1 = calcularDiferenciaDeTiempo(registro.hora_salida_1, registro.hora_vuelta_1);
-           var tiempoVuelta1SalidaFinal = calcularDiferenciaDeTiempo(hora_formateada_vuelta_curro,hora_formateada_salida_invierno);
-         
-           // Sumar los resultados
-           var tiempoTotal = tiempoEntradaPausa +   tiempoFinPausaSalida1 +   tiempoVuelta1SalidaFinal;
-        var tiempo_total_formateado=`${(tiempoTotal / (1000 * 60 * 60)).toFixed(2)} horas`;
+        var tiempoEntradaPausa = calcularDiferenciaDeTiempo(
+          hora_formateada_entrada_invierno,
+          hora_formateada_pausa_comida
+        );
+        // var tiempoPausaFinPausa = calcularDiferenciaDeTiempo(registro.hora_pausa, registro.hora_fin_pausa);
+        var tiempoFinPausaSalida1 = calcularDiferenciaDeTiempo(
+          hora_formateada_fin_pausa_comida,
+          hora_formateada_salida_curro1
+        );
+        // var tiempoSalida1Vuelta1 = calcularDiferenciaDeTiempo(registro.hora_salida_1, registro.hora_vuelta_1);
+        var tiempoVuelta1SalidaFinal = calcularDiferenciaDeTiempo(
+          hora_formateada_vuelta_curro,
+          hora_formateada_salida_invierno
+        );
+
+        // Sumar los resultados
+        var tiempoTotal =
+          tiempoEntradaPausa + tiempoFinPausaSalida1 + tiempoVuelta1SalidaFinal;
+        var tiempo_total_formateado = `${(
+          tiempoTotal /
+          (1000 * 60 * 60)
+        ).toFixed(2)} horas`;
 
         return {
           id: "",
@@ -398,7 +304,7 @@ document.addEventListener("DOMContentLoaded", function () {
           hora_salida_1: hora_formateada_salida_curro1,
           hora_vuelta_1: hora_formateada_vuelta_curro,
           hora_salida_final: hora_formateada_salida_invierno,
-          tiempoTotal:tiempo_total_formateado
+          tiempoTotal: tiempo_total_formateado,
         };
       });
 
@@ -406,15 +312,12 @@ document.addEventListener("DOMContentLoaded", function () {
         var inicioMs = new Date(`2000-01-01T${horaInicio}`).getTime();
         var finMs = new Date(`2000-01-01T${horaFin}`).getTime();
         var diferenciaMs = finMs - inicioMs;
-    
+
         // Limitar a dos decimales
         var diferenciaConDosDecimales = parseFloat(diferenciaMs.toFixed(2));
-    
-        return diferenciaConDosDecimales;
-    }
-      
-     
 
+        return diferenciaConDosDecimales;
+      }
 
       doc.autoTable(columns, rows, options);
       //-------Invoice Footer---------------------
@@ -423,38 +326,60 @@ document.addEventListener("DOMContentLoaded", function () {
 
       startY = doc.autoTableEndPosY() + 30;
       doc.setFontSize(fontSizes.NormalFontSize);
-     
 
       doc.setFontType("bold");
 
- // Calcular la diferencia de tiempo entre cada par de horas y sumar los resultados
- var totalHoras=0;
- rows.forEach(function(registro) {
-    var tiempoEntradaPausa = calcularDiferenciaDeTiempo(registro.hora_entrada, registro.hora_pausa);
-   // var tiempoPausaFinPausa = calcularDiferenciaDeTiempo(registro.hora_pausa, registro.hora_fin_pausa);
-    var tiempoFinPausaSalida1 = calcularDiferenciaDeTiempo(registro.hora_fin_pausa, registro.hora_salida_1);
-   // var tiempoSalida1Vuelta1 = calcularDiferenciaDeTiempo(registro.hora_salida_1, registro.hora_vuelta_1);
-    var tiempoVuelta1SalidaFinal = calcularDiferenciaDeTiempo(registro.hora_vuelta_1, registro.hora_salida_final);
-  
-    // Sumar los resultados
-    var tiempoTotal = tiempoEntradaPausa +   tiempoFinPausaSalida1 +   tiempoVuelta1SalidaFinal;
-  totalHoras+=tiempoTotal ;
-  });
+      // Calcular la diferencia de tiempo entre cada par de horas y sumar los resultados
+      var totalHoras = 0;
+      rows.forEach(function (registro) {
+        var tiempoEntradaPausa = calcularDiferenciaDeTiempo(
+          registro.hora_entrada,
+          registro.hora_pausa
+        );
+        // var tiempoPausaFinPausa = calcularDiferenciaDeTiempo(registro.hora_pausa, registro.hora_fin_pausa);
+        var tiempoFinPausaSalida1 = calcularDiferenciaDeTiempo(
+          registro.hora_fin_pausa,
+          registro.hora_salida_1
+        );
+        // var tiempoSalida1Vuelta1 = calcularDiferenciaDeTiempo(registro.hora_salida_1, registro.hora_vuelta_1);
+        var tiempoVuelta1SalidaFinal = calcularDiferenciaDeTiempo(
+          registro.hora_vuelta_1,
+          registro.hora_salida_final
+        );
 
-      doc.text("Total Horas,", rightcol1, (startY += lineSpacing.NormalSpacing));
-      doc.text(`${(totalHoras / (1000 * 60 * 60)).toFixed(2)}`, rightcol2, startY);
+        // Sumar los resultados
+        var tiempoTotal =
+          tiempoEntradaPausa + tiempoFinPausaSalida1 + tiempoVuelta1SalidaFinal;
+        totalHoras += tiempoTotal;
+      });
+
+      doc.text(
+        "Total Horas,",
+        rightcol1,
+        (startY += lineSpacing.NormalSpacing)
+      );
+      doc.text(
+        `${(totalHoras / (1000 * 60 * 60)).toFixed(2)}`,
+        rightcol2,
+        startY
+      );
       doc.setFontSize(fontSizes.NormalFontSize);
+      var rightcol1 = 200;
+      var rightcol2 = 450;
+      startY+=50
       doc.setFontType("bold");
       doc.text(
-        "For " + comapnyJSON.CompanyName + ",",
-        rightcol2,
+        "Firma " + datosEmpresa.nombre + ",",
+        rightcol1,
         (startY += lineSpacing.NormalSpacing + 25)
       );
       doc.text(
-        "Authorised Signatory",
+        "Firma "+ employeInfoJSON.nombre,
         rightcol2,
-        (startY += lineSpacing.NormalSpacing + 25)
+        startY
       );
-      doc.save("InvoiceTemplate.pdf");
+      doc.setFontType("bold");
+     
+      doc.save(employeInfoJSON.nombre+".pdf");
     });
 });
