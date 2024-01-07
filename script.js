@@ -380,6 +380,6 @@ document.addEventListener("DOMContentLoaded", function () {
       );
       doc.setFontType("bold");
      
-      doc.save(employeInfoJSON.nombre+".pdf");
+      doc.save(employeInfoJSON.nombre+"_Fichaje.pdf");
     });
 });
