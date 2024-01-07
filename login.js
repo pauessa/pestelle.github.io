@@ -16,9 +16,9 @@ function validateLogin() {
         .then(validCredentials => {
             // Verifica si las credenciales proporcionadas son válidas
             if (isValidCredentials(username, password, validCredentials)) {
-                console.log('Credenciales válidas. Acceso permitido.');
+                window.location.href = "home.html";
             } else {
-                console.log('Credenciales no válidas. Acceso denegado.');
+                alert("Credenciales incorrectas. Por favor, inténtalo de nuevo.");
             }
         })
         .catch(error => {
@@ -28,5 +28,8 @@ function validateLogin() {
 
 function isValidCredentials(username, password, validCredentials) {
     // Verificar si las credenciales proporcionadas coinciden con las válidas del archivo
-    return validCredentials.username === username && validCredentials.password === password;
+    const inputUsernameLower = username.toLowerCase();
+
+    // Verificar las credenciales sin distinción de mayúsculas/minúsculas.
+    return validCredentials.username.toLowerCase() === inputUsernameLower && validCredentials.password === password;
 }
