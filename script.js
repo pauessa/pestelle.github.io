@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
   const empleados = [
-    { nombre: "Victor", dni: "12345678A" },
-    { nombre: "Carol", dni: "98765432B" },
-    { nombre: "Rafa", dni: "45678901C" },
-    { nombre: "Empleado4", dni: "11223344D" },
-    { nombre: "Empleado5", dni: "55667788E" },
+    { nombre: "Victor Gisbert Olmos", dni: "48293145P" },
+    { nombre: "Carol Alventosa Escorcia", dni: "20429510J" },
+    { nombre: "Rafael Muñoz Llopis", dni: "20451814F" },
+    { nombre: "Aaron Pla Lomas", dni: "20497576E" },
+    { nombre: "Diyan Velev Talev", dni: "Y3957972P" },
   ];
   const datosEmpresa = {
     nombre:"Esteller Lloret S.L."
@@ -139,29 +139,29 @@ document.addEventListener("DOMContentLoaded", function () {
         { align: "right" }
       );
       doc.setFontSize(fontSizes.NormalFontSize);
-      doc.text("GSTIN", startX, (startY += lineSpacing.NormalSpacing));
+      doc.text("Direccion:", startX, (startY += lineSpacing.NormalSpacing));
       doc.setFontType("normal");
-      doc.text("comapnyJSON.CompanyGSTIN", 80, startY);
+      doc.text("Polígono Industrial,", 100, startY);
       doc.setFontType("bold");
-      doc.text("STATE", startX, (startY += lineSpacing.NormalSpacing));
+      doc.text("", startX, (startY += lineSpacing.NormalSpacing));
       doc.setFontType("normal");
-      doc.text("comapnyJSON.CompanyState", 80, startY);
+      doc.text("c parcela 8, 46800, Valencia", 100, startY);
       doc.setFontType("bold");
-      doc.text("PAN", startX, (startY += lineSpacing.NormalSpacing));
+      doc.text("CIF", startX, (startY += lineSpacing.NormalSpacing));
       doc.setFontType("normal");
-      doc.text("comapnyJSON.CompanyPAN", 80, startY);
+      doc.text("B96830609", 100, startY);
       doc.setFontType("bold");
-      doc.text("PIN", startX, (startY += lineSpacing.NormalSpacing));
+      doc.text("", startX, (startY += lineSpacing.NormalSpacing));
       doc.setFontType("normal");
-      doc.text("comapnyJSON.PIN", 80, startY);
+      doc.text("", 80, startY);
       doc.setFontType("bold");
-      doc.text("EMAIL", startX, (startY += lineSpacing.NormalSpacing));
+      doc.text("", startX, (startY += lineSpacing.NormalSpacing));
       doc.setFontType("normal");
-      doc.text("comapnyJSON.companyEmail", 80, startY);
+      doc.text("", 80, startY);
       doc.setFontType("bold");
-      doc.text("Phone: ", startX, (startY += lineSpacing.NormalSpacing));
+      doc.text("", startX, (startY += lineSpacing.NormalSpacing));
       doc.setFontType("normal");
-      doc.text("comapnyJSON.companyPhno", 80, startY);
+      doc.text("", 80, startY);
       //-------Customer Info Shipping---------------------
       var rightcol1 = 380;
       var rightcol2 = 430;
@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
       startY = startBilling;
       doc.setFontType("bold");
       doc.text(
-        "Datos de empleado",
+        "Datos del empleado",
         rightcol1,
         (startY += lineSpacing.NormalSpacing)
       );
