@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
     nombre:"Esteller Lloret S.L."
   }
   const userNameSelect = document.getElementById("userName");
-
   empleados.forEach((empleado) => {
     const option = document.createElement("option");
     // Convierte el objeto a una cadena JSON y asigna la cadena al atributo "value"
@@ -23,7 +22,13 @@ document.addEventListener("DOMContentLoaded", function () {
     mode: "multiple",
     dateFormat: "d/m/Y",
   });
-
+  function parseDate(fecha) {
+    var partes = fecha.split("/");
+    var dia = parseInt(partes[0], 10);
+    var mes = parseInt(partes[1], 10) - 1; // Los meses en JavaScript son base 0
+    var anio = parseInt(partes[2], 10);
+    return new Date(anio, mes, dia);
+  }
   document
     .getElementById("recuperarFechasButton")
     .addEventListener("click", function () {
@@ -218,6 +223,18 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         startY: (startY += 50),
       };
+      var todasSonVerano=false
+      fechasSeleccionadas.forEach(fecha => {
+        todasSonVerano = true
+          var date = parseDate(fecha);
+          var mes = date.getMonth() + 1; // Enero es 0, por eso sumamos 1
+          var dia = date.getDate();
+    
+          // Función para verificar si la fecha está entre el 1 de agosto y el 30 de septiembre
+          if(mes!=7&&mes!=8&&mes!=9){
+            todasSonVerano= false
+          }
+     });
       var nombre_usuario = empleadoSeleccionado.nombre;
       var columns = [
         { title: "", dataKey: "id", width: 90 },
@@ -230,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
         { title: "Hora salida final", dataKey: "hora_salida_final", width: 40 },
         { title: "Tiempo total", dataKey: "tiempoTotal", width: 40 },
       ];
-      if(nombre_usuario.includes("Carol")||nombre_usuario.includes("Aaron")){
+      if(nombre_usuario.includes("Carol")||nombre_usuario.includes("Aaron")||todasSonVerano){
         columns = [
           { title: "", dataKey: "id", width: 90 },
           { title: "Dia", dataKey: "dia", width: 40 },
@@ -241,7 +258,12 @@ document.addEventListener("DOMContentLoaded", function () {
           { title: "Tiempo total", dataKey: "tiempoTotal", width: 40 },
         ];
       }
-     
+
+      
+       
+        
+
+
    
       var rows = fechasSeleccionadas.map(function (fecha, index) {
         // Almacenar cada valor en una variable distinta
@@ -253,162 +275,142 @@ document.addEventListener("DOMContentLoaded", function () {
         var hora_formateada_vuelta_curro;
         var hora_formateada_salida_invierno;
         var tiempo_total_formateado;
+    
         function getRandomInt(min, max) {
-          return Math.floor(Math.random() * (max - min + 1)) + min;
+            return Math.floor(Math.random() * (max - min + 1)) + min;
         }
-        if(nombre_usuario.includes("Carol")){
-          let hora =7;
-          let minuto = getRandomInt(25,45);
-          hora_formateada_entrada_invierno = `${hora
-            .toString()
-            .padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+        // Convertir la fecha a un objeto Date
+        var date = parseDate(fecha);
+        var mes = date.getMonth() + 1; // Enero es 0, por eso sumamos 1
+        var dia = date.getDate();
+  
+        // Función para verificar si la fecha está entre el 1 de agosto y el 30 de septiembre
+        function esVerano() {
+            return (mes === 7) || (mes === 8) ||(mes === 9);
+        }
+    
+        if (nombre_usuario.includes("Carol")) {
+            let hora = 7;
+            let minuto = getRandomInt(25, 45);
+            hora_formateada_entrada_invierno = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+            hora = getRandomInt(9, 10);
+            minuto = hora === 10 ? getRandomInt(0, 10) : getRandomInt(50, 59);
+            hora_formateada_pausa_comida = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+            hora = 10;
+            minuto = getRandomInt(28, 45);
+            hora_formateada_fin_pausa_comida = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+            hora = getRandomInt(13, 14);
+            minuto = hora === 14 ? getRandomInt(0, 15) : getRandomInt(50, 59);
+            hora_formateada_salida_curro1 = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+            var tiempoEntradaPausa = calcularDiferenciaDeTiempo(hora_formateada_entrada_invierno, hora_formateada_pausa_comida);
+            var tiempoFinPausaSalida1 = calcularDiferenciaDeTiempo(hora_formateada_fin_pausa_comida, hora_formateada_salida_curro1);
+            var tiempoTotal = tiempoEntradaPausa + tiempoFinPausaSalida1;
+            tiempo_total_formateado = `${(tiempoTotal / (1000 * 60 * 60)).toFixed(2)} horas`;
+    
+        } else if (nombre_usuario.includes("Aaron")) {
+            let hora = getRandomInt(7, 8);
+            let minuto = hora === 8 ? getRandomInt(0, 15) : getRandomInt(50, 59);
+            hora_formateada_entrada_invierno = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+            hora = getRandomInt(9, 10);
+            minuto = hora === 10 ? getRandomInt(0, 10) : getRandomInt(50, 59);
+            hora_formateada_pausa_comida = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+            hora = 10;
+            minuto = getRandomInt(28, 45);
+            hora_formateada_fin_pausa_comida = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+            hora = 13;
+            minuto = getRandomInt(28, 45);
+            hora_formateada_salida_curro1 = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+            var tiempoEntradaPausa = calcularDiferenciaDeTiempo(hora_formateada_entrada_invierno, hora_formateada_pausa_comida);
+            var tiempoFinPausaSalida1 = calcularDiferenciaDeTiempo(hora_formateada_fin_pausa_comida, hora_formateada_salida_curro1);
+            var tiempoTotal = tiempoEntradaPausa + tiempoFinPausaSalida1;
+            tiempo_total_formateado = `${(tiempoTotal / (1000 * 60 * 60)).toFixed(2)} horas`;
+    
+        } else {
+            let hora;
+            let minuto;
+            if (esVerano()) {
+                // Horas específicas para el periodo del 1 de agosto al 30 de septiembre
+                hora = getRandomInt(5, 6);
+                minuto = hora === 7 ? getRandomInt(0, 15) : getRandomInt(50, 59);
+                hora_formateada_entrada_invierno = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+                hora = getRandomInt(9, 10);
+                minuto = hora === 10 ? getRandomInt(0, 10) : getRandomInt(50, 59);
+                hora_formateada_pausa_comida = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+                hora = 10;
+                minuto = getRandomInt(28, 45);
+                hora_formateada_fin_pausa_comida = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+                hora = 14;
+                minuto = getRandomInt(28, 45);
+                hora_formateada_salida_curro1 = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
 
-          hora = getRandomInt(9, 10);
-          minuto = hora === 10 ? getRandomInt(0, 10) : getRandomInt(50, 59);
-          hora_formateada_pausa_comida = `${hora
-            .toString()
-            .padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+                var tiempoEntradaPausa = calcularDiferenciaDeTiempo(hora_formateada_entrada_invierno, hora_formateada_pausa_comida);
+                var tiempoFinPausaSalida1 = calcularDiferenciaDeTiempo(hora_formateada_fin_pausa_comida, hora_formateada_salida_curro1);
+                var tiempoTotal = tiempoEntradaPausa + tiempoFinPausaSalida1;
+                tiempo_total_formateado = `${(tiempoTotal / (1000 * 60 * 60)).toFixed(2)} horas`;
+              
+            } else {
+                // Horas normales para el resto del año
+                hora = getRandomInt(7, 8);
+                minuto = hora === 8 ? getRandomInt(0, 15) : getRandomInt(50, 59);
+                hora_formateada_entrada_invierno = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+                hora = getRandomInt(9, 10);
+                minuto = hora === 10 ? getRandomInt(0, 10) : getRandomInt(50, 59);
+                hora_formateada_pausa_comida = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+                hora = 10;
+                minuto = getRandomInt(28, 45);
+                hora_formateada_fin_pausa_comida = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+                hora = 13;
+                minuto = getRandomInt(28, 45);
+                hora_formateada_salida_curro1 = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+                hora = 15;
+                minuto = getRandomInt(28, 45);
+                hora_formateada_vuelta_curro = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
+    
+                hora = 18;
+                minuto = getRandomInt(28, 45);
+                hora_formateada_salida_invierno = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
 
-          hora = 10;
-          minuto = getRandomInt(28, 45);
-          hora_formateada_fin_pausa_comida = `${hora
-            .toString()
-            .padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
-
-          hora = getRandomInt(13,14);
-          minuto = hora === 14 ? getRandomInt(0, 15) : getRandomInt(50, 59);
-          hora_formateada_salida_curro1 = `${hora
-            .toString()
-            .padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
-
-            var tiempoEntradaPausa = calcularDiferenciaDeTiempo(
-            hora_formateada_entrada_invierno,
-            hora_formateada_pausa_comida
-          );
-          // var tiempoPausaFinPausa = calcularDiferenciaDeTiempo(registro.hora_pausa, registro.hora_fin_pausa);
-          var tiempoFinPausaSalida1 = calcularDiferenciaDeTiempo(
-            hora_formateada_fin_pausa_comida,
-            hora_formateada_salida_curro1
-          );
-          var tiempoTotal =
-          tiempoEntradaPausa + tiempoFinPausaSalida1;
-          tiempo_total_formateado = `${(
-            tiempoTotal /
-            (1000 * 60 * 60)
-          ).toFixed(2)} horas`;
-
-        }else if(nombre_usuario.includes("Aaron")){
-          let hora = getRandomInt(7, 8);
-          let minuto = hora === 8 ? getRandomInt(0, 15) : getRandomInt(50, 59);
-          hora_formateada_entrada_invierno = `${hora
-            .toString()
-            .padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
-
-          hora = getRandomInt(9, 10);
-          minuto = hora === 10 ? getRandomInt(0, 10) : getRandomInt(50, 59);
-          hora_formateada_pausa_comida = `${hora
-            .toString()
-            .padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
-
-          hora = 10;
-          minuto = getRandomInt(28, 45);
-          hora_formateada_fin_pausa_comida = `${hora
-            .toString()
-            .padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
-
-          hora = 13;
-          minuto = getRandomInt(28, 45);
-          hora_formateada_salida_curro1 = `${hora
-            .toString()
-            .padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
-
-            var tiempoEntradaPausa = calcularDiferenciaDeTiempo(
-            hora_formateada_entrada_invierno,
-            hora_formateada_pausa_comida
-          );
-          // var tiempoPausaFinPausa = calcularDiferenciaDeTiempo(registro.hora_pausa, registro.hora_fin_pausa);
-          var tiempoFinPausaSalida1 = calcularDiferenciaDeTiempo(
-            hora_formateada_fin_pausa_comida,
-            hora_formateada_salida_curro1
-          );
-          var tiempoTotal =
-          tiempoEntradaPausa + tiempoFinPausaSalida1;
-          tiempo_total_formateado = `${(
-            tiempoTotal /
-            (1000 * 60 * 60)
-          ).toFixed(2)} horas`;
-        }else{
-          let hora = getRandomInt(7, 8);
-          let minuto = hora === 8 ? getRandomInt(0, 15) : getRandomInt(50, 59);
-          hora_formateada_entrada_invierno = `${hora
-            .toString()
-            .padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
-
-          hora = getRandomInt(9, 10);
-          minuto = hora === 10 ? getRandomInt(0, 10) : getRandomInt(50, 59);
-          hora_formateada_pausa_comida = `${hora
-            .toString()
-            .padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
-
-          hora = 10;
-          minuto = getRandomInt(28, 45);
-          hora_formateada_fin_pausa_comida = `${hora
-            .toString()
-            .padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
-
-          hora = 13;
-          minuto = getRandomInt(28, 45);
-          hora_formateada_salida_curro1 = `${hora
-            .toString()
-            .padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
-
-          hora = 15;
-          minuto = getRandomInt(28, 45);
-          hora_formateada_vuelta_curro = `${hora
-            .toString()
-            .padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
-
-          hora = 18;
-          minuto = getRandomInt(28, 45);
-          hora_formateada_salida_invierno = `${hora
-            .toString()
-            .padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
-
-          var tiempoEntradaPausa = calcularDiferenciaDeTiempo(
-            hora_formateada_entrada_invierno,
-            hora_formateada_pausa_comida
-          );
-          // var tiempoPausaFinPausa = calcularDiferenciaDeTiempo(registro.hora_pausa, registro.hora_fin_pausa);
-          var tiempoFinPausaSalida1 = calcularDiferenciaDeTiempo(
-            hora_formateada_fin_pausa_comida,
-            hora_formateada_salida_curro1
-          );
-          // var tiempoSalida1Vuelta1 = calcularDiferenciaDeTiempo(registro.hora_salida_1, registro.hora_vuelta_1);
-          var tiempoVuelta1SalidaFinal = calcularDiferenciaDeTiempo(
-            hora_formateada_vuelta_curro,
-            hora_formateada_salida_invierno
-          );
-
-          // Sumar los resultados
-          var tiempoTotal =
-            tiempoEntradaPausa + tiempoFinPausaSalida1 + tiempoVuelta1SalidaFinal;
-          tiempo_total_formateado = `${(
-            tiempoTotal /
-            (1000 * 60 * 60)
-          ).toFixed(2)} horas`;
-      }
+                var tiempoEntradaPausa = calcularDiferenciaDeTiempo(hora_formateada_entrada_invierno, hora_formateada_pausa_comida);
+                var tiempoFinPausaSalida1 = calcularDiferenciaDeTiempo(hora_formateada_fin_pausa_comida, hora_formateada_salida_curro1);
+                var tiempoVuelta1SalidaFinal = calcularDiferenciaDeTiempo(hora_formateada_vuelta_curro, hora_formateada_salida_invierno);
+        
+                var tiempoTotal = tiempoEntradaPausa + tiempoFinPausaSalida1 + tiempoVuelta1SalidaFinal;
+                tiempo_total_formateado = `${(tiempoTotal / (1000 * 60 * 60)).toFixed(2)} horas`;
+            }
+    
+           
+        }
+    
         return {
-          id: "",
-          dia: fecha,
-          hora_entrada: hora_formateada_entrada_invierno,
-          hora_pausa: hora_formateada_pausa_comida,
-          hora_fin_pausa: hora_formateada_fin_pausa_comida,
-          hora_salida_1: hora_formateada_salida_curro1,
-          hora_vuelta_1: hora_formateada_vuelta_curro,
-          hora_salida_final: hora_formateada_salida_invierno,
-          tiempoTotal: tiempo_total_formateado,
+            id: "",
+            dia: fecha,
+            hora_entrada: hora_formateada_entrada_invierno,
+            hora_pausa: hora_formateada_pausa_comida,
+            hora_fin_pausa: hora_formateada_fin_pausa_comida,
+            hora_salida_1: hora_formateada_salida_curro1,
+            hora_vuelta_1: hora_formateada_vuelta_curro,
+            hora_salida_final: hora_formateada_salida_invierno,
+            tiempoTotal: tiempo_total_formateado,
+            verano:esVerano(),
         };
-      });
+    });
+    
 
       function calcularDiferenciaDeTiempo(horaInicio, horaFin) {
         var inicioMs = new Date(`2000-01-01T${horaInicio}`).getTime();
@@ -435,7 +437,7 @@ document.addEventListener("DOMContentLoaded", function () {
       var totalHoras = 0;
       rows.forEach(function (registro) {
         var nombre_usuario = empleadoSeleccionado.nombre;
-        if(nombre_usuario.includes("Carol")||nombre_usuario.includes("Aaron")){
+        if(nombre_usuario.includes("Carol")||nombre_usuario.includes("Aaron")||registro.verano){
 
           var tiempoEntradaPausa = calcularDiferenciaDeTiempo(
             registro.hora_entrada,
