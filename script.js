@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function () {
           var dia = date.getDate();
     
           // Función para verificar si la fecha está entre el 1 de agosto y el 30 de septiembre
-          if(mes!=7&&mes!=8&&mes!=9){
+          if(mes!=6&&mes!=7&&mes!=8&&mes!=9){
             todasSonVerano= false
           }
      });
@@ -287,7 +287,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
         // Función para verificar si la fecha está entre el 1 de agosto y el 30 de septiembre
         function esVerano() {
-            return (mes === 7) || (mes === 8) ||(mes === 9);
+            return (mes === 6) || (mes === 7) || (mes === 8) ||(mes === 9);
         }
     
         if (nombre_usuario.includes("Carol")) {
@@ -341,7 +341,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Horas específicas para el periodo del 1 de agosto al 30 de septiembre
                 hora = getRandomInt(5, 6);
                 minuto = hora === 6 ? getRandomInt(0, 15) : getRandomInt(50, 59);
-                
+
                 hora_formateada_entrada_invierno = `${hora.toString().padStart(2, "0")}:${minuto.toString().padStart(2, "0")}`;
     
                 hora = getRandomInt(9, 10);
